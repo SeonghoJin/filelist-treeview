@@ -33,21 +33,29 @@ export class FileListTree {
         return file.webkitRelativePath === '' ? file.name : file.webkitRelativePath;
     }
 
-    private toFileListTree = (fileListTreeItems: FileListTreeItem[]) : FileListTreeType => {
+    private getFileAndFolder = (fileListTreeItems: FileListTreeItem[]) => {
         let {folder, file} = groupBy((fileListTreeItem: FileListTreeItem) => {
             return fileListTreeItem.path.length > 1 ? 'folder' : 'file';
         }, fileListTreeItems);
         folder = folder ?? [];
         file = file ?? [];
-        const groupedItems = groupBy((fileListTreeItem: FileListTreeItem) => {
+        return {folder, file};
+    }
+
+    private groupingFolder = (folder: FileListTreeItem[]) => {
+        const grouped = groupBy((fileListTreeItem: FileListTreeItem) => {
             const shiftedItem = fileListTreeItem.path.shift();
             if(shiftedItem === undefined){
                 throw new Error("can not shifted item");
             }
             return shiftedItem;
         }, folder);
+        return grouped;
+    }
+
+    private mergeFileAndFolder = (folder: {[p: string] : FileListTreeItem[]}, file: FileListTreeItem[]) => {
         const items = {};
-        const folderEntries = Object.entries(groupedItems);
+        const folderEntries = Object.entries(folder);
         for(const [key, value] of folderEntries){
             items[key] = this.toFileListTree(value);
         }
@@ -55,5 +63,11 @@ export class FileListTree {
             items[item.path[0]] = item.file;
         }
         return items;
+    }
+
+    private toFileListTree = (fileListTreeItems: FileListTreeItem[]) : FileListTreeType => {
+        const {folder, file} = this.getFileAndFolder(fileListTreeItems);
+        const groupedFolder = this.groupingFolder(folder);
+        return this.mergeFileAndFolder(groupedFolder, file);
     }
 }
