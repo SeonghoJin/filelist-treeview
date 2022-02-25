@@ -1,0 +1,4 @@
+.parcel-cache
+.lib
+node_modules
+example

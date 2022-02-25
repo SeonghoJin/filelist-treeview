@@ -1,0 +1,46 @@
+{
+  "name": "react-filelist-treeview",
+  "version": "0.0.1",
+  "description": "",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build lib/index.tsx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bigshelf/react-filelist-treeview.git"
+  },
+  "keywords": [
+    "treeview",
+    "filesystem",
+    "browser",
+    "filelist",
+    "file"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bigshelf/react-filelist-treeview/issues"
+  },
+  "homepage": "https://github.com/bigshelf/react-filelist-treeview#readme",
+  "devDependencies": {
+    "@parcel/packager-ts": "^2.3.2",
+    "@parcel/transformer-typescript-types": "^2.3.2",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "typescript": "^4.5.5"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "recoil": "^0.6.1"
+  },
+  "files": [
+    "/dist"
+  ],
+  "dependencies": {
+    "@fxts/core": "^0.5.0"
+  }
+}
