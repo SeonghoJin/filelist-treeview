@@ -12,20 +12,19 @@ export class ReactFileListTree {
         this.fileListTreeObj = fileListTree.getFileListTree();
     }
 
-    private makeReactComponent = (fileListTreeObj: FileListTreeType, nodeIndex: number = 1) => {
+    private makeReactComponent = (fileListTreeObj: FileListTreeType, nodeIndex = [1] ) => {
 
         const componentArray = [];
 
         for(const pathName in fileListTreeObj){
 
             const value = fileListTreeObj[pathName];
-
             if(isFile(value)){
-                componentArray.push(<ReactFileListTreeViewItem nodeId={nodeIndex++} label={value.name}/>)
+                componentArray.push(<ReactFileListTreeViewItem label={value.name} nodeId={nodeIndex[0]++}/>);
             } else {
                 componentArray.push(
-                    <ReactFileListTreeViewItem nodeId={nodeIndex++} label={pathName}>
-                        {this.makeReactComponent(value)}
+                    <ReactFileListTreeViewItem label={pathName} nodeId={nodeIndex[0]++}>
+                        {this.makeReactComponent(value, nodeIndex)}
                     </ReactFileListTreeViewItem>
                 )
             }

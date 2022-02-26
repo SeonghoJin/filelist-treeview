@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback, useEffect, useMemo, useState} from 'react';
 import './App.css';
-import {FileListTree, ReactFileListTree} from "filelist-treeview";
+import {ReactFileListTree, FileListTree} from "filelist-treeview/dist/esm/index";
 
 function App() {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -15,7 +15,9 @@ function App() {
 
   return (
       <div>
-          {elements}
+          <div>
+              {elements}
+          </div>
         <input
             {...{
                 directory : "",
