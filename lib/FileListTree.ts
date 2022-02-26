@@ -1,20 +1,44 @@
 import {groupBy} from "@fxts/core";
+import {isFileArray, isFileList, isFileTypeArray} from "./util";
 
-export interface FileListTreeItem {
-    file: File,
+export type FileType<T = unknown> = {
+    fileName: string,
+    path: string,
+    data?: T,
+}
+
+export type FileListTreeItem = {
+    file: FileType,
     path: string[]
 }
 
 export type FileListTreeType = {
-    [key: string] : File | FileListTreeType
+    [key: string] : FileType | FileListTreeType
 };
 
 export class FileListTree {
 
     fileListTree : FileListTreeType;
 
-    constructor(fileList: File[]) {
-        const fileListTreeItem = this.splitFileList(fileList);
+    constructor(fileList: File[] | FileList | FileType[]) {
+        let fileListTreeItem : null | FileListTreeItem[] = null;
+
+        if(isFileList(fileList)){
+            fileListTreeItem = this.fileListToFileListTreeItem(fileList);
+        }
+
+        if(isFileArray(fileList)){
+            fileListTreeItem = this.fileArrayToFileListTreeItem(fileList);
+        }
+
+        if(isFileTypeArray(fileList)){
+            fileListTreeItem = this.fileTypeArrayToFileListTreeItem(fileList);
+        }
+
+        if(fileListTreeItem === null){
+            throw new Error('not support type');
+        }
+
         this.fileListTree = this.toFileListTree(fileListTreeItem);
     }
 
@@ -22,15 +46,42 @@ export class FileListTree {
         return this.fileListTree;
     }
 
-    private splitFileList = (fileList: File[]) : FileListTreeItem[] => {
-        return fileList.map((file: File) => {
-            const path = this.getPath(file);
-            return {file, path : path.split('/')}
+    private fileTypeArrayToFileListTreeItem = (fileTypeArray: FileType[]) : FileListTreeItem[] => {
+        return fileTypeArray.map((fileType: FileType) => {
+            const path = this.getPath(fileType);
+            return {
+                path : path.split('/'),
+                file: fileType,
+            }
         })
     }
 
-    private getPath = (file: File) => {
-        return file.webkitRelativePath === '' ? file.name : file.webkitRelativePath;
+    private fileListToFileListTreeItem = (fileList: FileList) : FileListTreeItem[] => {
+        return Array.from(fileList).map((file: File) => {
+            const path = this.getPath({fileName: file.name, path: file.webkitRelativePath});
+            return {file : {
+                    fileName: file.name,
+                    path: file.webkitRelativePath,
+                    data: file
+                },
+                path : path.split('/')}
+        })
+    }
+
+    private fileArrayToFileListTreeItem = (fileList: File[]) : FileListTreeItem[] => {
+        return fileList.map((file: File) => {
+            const path = this.getPath({fileName: file.name, path: file.webkitRelativePath});
+            return {file : {
+                            fileName: file.name,
+                            path: file.webkitRelativePath,
+                            data: file
+                        },
+                path : path.split('/')}
+        })
+    }
+
+    private getPath = (file: FileType) => {
+        return file.path === '' ? file.fileName: file.path;
     }
 
     private getFileAndFolder = (fileListTreeItems: FileListTreeItem[]) => {

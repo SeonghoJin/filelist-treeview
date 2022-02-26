@@ -1,42 +1,52 @@
-import React from "react";
-import {FileListTree, FileListTreeType} from "~FileListTree";
+import React, {useCallback, useEffect, useState} from "react";
+import {FileListTree, FileListTreeType, FileType} from "~FileListTree";
 import {ReactFileListTreeView} from "./ReactFileListTreeView";
 import {ReactFileListTreeViewItem} from "./ReactFileListTreeViewItem";
-import {isFile} from "../util";
+import {isFileType} from "../util";
 
-export class ReactFileListTree {
+type ReactFileListTreeProps = {
+    fileListTree : FileListTree
+    onClick?: (fileType: FileType) => void;
+}
 
-    private fileListTreeObj : FileListTreeType
+export const ReactFileListTree = ({fileListTree, onClick} : ReactFileListTreeProps) => {
 
-    constructor(fileListTree: FileListTree) {
-        this.fileListTreeObj = fileListTree.getFileListTree();
-    }
+    const [fileListTreeObj, setFileListTreeObj] = useState<null | FileListTreeType>(null);
 
-    private makeReactComponent = (fileListTreeObj: FileListTreeType, nodeIndex = [1] ) => {
+    useEffect(() => {
+        setFileListTreeObj(fileListTree.getFileListTree());
+    }, [fileListTree]);
 
+    const makeReactComponent = useCallback((fileListTreeObj: FileListTreeType, nodeIndex = [1]) => {
         const componentArray = [];
 
         for(const pathName in fileListTreeObj){
 
             const value = fileListTreeObj[pathName];
-            if(isFile(value)){
-                componentArray.push(<ReactFileListTreeViewItem label={value.name} nodeId={nodeIndex[0]++}/>);
+
+            if(isFileType(value)){
+                const key = nodeIndex[0]++;
+                componentArray.push(<ReactFileListTreeViewItem
+                    item={value}
+                    label={value.fileName}
+                    nodeId={key}
+                    key={key}
+                    onClick={onClick}
+                />);
             } else {
+                const key = nodeIndex[0]++
                 componentArray.push(
-                    <ReactFileListTreeViewItem label={pathName} nodeId={nodeIndex[0]++}>
-                        {this.makeReactComponent(value, nodeIndex)}
+                    <ReactFileListTreeViewItem label={pathName} nodeId={key} key={key}>
+                        {makeReactComponent(value, nodeIndex)}
                     </ReactFileListTreeViewItem>
                 )
             }
         }
 
         return componentArray;
-    }
+    }, [])
 
-    public getComponent = () => {
-        return (<ReactFileListTreeView>
-            {this.makeReactComponent(this.fileListTreeObj)}
-        </ReactFileListTreeView>)
-    }
-
+    return <ReactFileListTreeView>
+        {fileListTreeObj && makeReactComponent(fileListTreeObj)}
+    </ReactFileListTreeView>;
 }
