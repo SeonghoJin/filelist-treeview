@@ -1,8 +1,8 @@
 import React from "react";
 import {FileListTree, FileListTreeType} from "~FileListTree";
-import {ReactFileListTreeView} from "~ReactFileListTree/ReactFileListTreeView";
-import {ReactFileListTreeViewItem} from "~ReactFileListTree/ReactFileListTreeViewItem";
-import {isFile} from "~util";
+import {ReactFileListTreeView} from "./ReactFileListTreeView";
+import {ReactFileListTreeViewItem} from "./ReactFileListTreeViewItem";
+import {isFile} from "../util";
 
 export class ReactFileListTree {
 
