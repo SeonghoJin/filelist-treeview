@@ -1,11 +1,11 @@
 import {groupBy} from "@fxts/core";
 
-interface FileListTreeItem {
+export interface FileListTreeItem {
     file: File,
     path: string[]
 }
 
-type FileListTreeType = {
+export type FileListTreeType = {
     [key: string] : File | FileListTreeType
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "react-filelist-treeview",
+  "name": "filelist-treeview",
   "version": "0.0.1",
   "description": "",
   "module": "./dist/esm/index.js",
@@ -41,6 +41,11 @@
     "/dist"
   ],
   "dependencies": {
-    "@fxts/core": "^0.5.0"
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@fxts/core": "^0.5.0",
+    "@mui/icons-material": "^5.4.2",
+    "@mui/lab": "^5.0.0-alpha.70",
+    "@mui/material": "^5.4.3"
   }
 }
