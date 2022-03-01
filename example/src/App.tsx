@@ -57,6 +57,11 @@ function App() {
                   fileListTree={fileListTree2}
               />}
               <ReactFileListTree
+                  baseStyle={{
+                      sx: {
+                          width: 500,
+                      }
+                  }}
                   onClick={(file) => {
                       console.log(file);
                   }}

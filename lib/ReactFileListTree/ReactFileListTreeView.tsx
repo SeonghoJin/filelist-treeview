@@ -1,16 +1,18 @@
 import {TreeView} from "@mui/lab";
 import React from "react";
 import {ExpandMore, ChevronRight} from "@mui/icons-material"
+import {TreeViewProps, TreeViewPropsBase} from "@mui/lab/TreeView/TreeView";
 
 type Props = {
     children?: any
-};
+    baseStyle? : TreeViewPropsBase;
+} & TreeViewProps;
 
-export const ReactFileListTreeView = ({children}: Props) => {
+export const ReactFileListTreeView = ({children, baseStyle}: Props) => {
     return <TreeView
-        sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-        defaultCollapseIcon={<ExpandMore/>}
-        defaultExpandIcon={<ChevronRight/>}
+        {...baseStyle}
+        defaultCollapseIcon={baseStyle?.defaultCollapseIcon ?? <ExpandMore/>}
+        defaultExpandIcon={baseStyle?.defaultExpandIcon ?? <ChevronRight/>}
     >
         {children}
     </TreeView>

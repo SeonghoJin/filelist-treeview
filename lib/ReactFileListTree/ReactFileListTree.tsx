@@ -3,13 +3,15 @@ import {FileListTree, FileListTreeType, FileType} from "~FileListTree";
 import {ReactFileListTreeView} from "./ReactFileListTreeView";
 import {ReactFileListTreeViewItem} from "./ReactFileListTreeViewItem";
 import {isFileType} from "../util";
+import {TreeViewPropsBase} from "@mui/lab/TreeView/TreeView";
 
 type ReactFileListTreeProps = {
     fileListTree : FileListTree
     onClick?: (fileType: FileType) => void;
+    baseStyle? : TreeViewPropsBase;
 }
 
-export const ReactFileListTree = ({fileListTree, onClick} : ReactFileListTreeProps) => {
+export const ReactFileListTree = ({fileListTree, onClick, baseStyle} : ReactFileListTreeProps) => {
 
     const [fileListTreeObj, setFileListTreeObj] = useState<null | FileListTreeType>(null);
 
@@ -46,7 +48,7 @@ export const ReactFileListTree = ({fileListTree, onClick} : ReactFileListTreePro
         return componentArray;
     }, [])
 
-    return <ReactFileListTreeView>
+    return <ReactFileListTreeView baseStyle={baseStyle}>
         {fileListTreeObj && makeReactComponent(fileListTreeObj)}
     </ReactFileListTreeView>;
 }
